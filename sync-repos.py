@@ -18,6 +18,7 @@ repofile = inputfile()
 # change into directory of file
 if "/" in repofile:
     [basepath, newrepo] = repofile.rsplit("/", maxsplit=1)
+    print("changing dir to " + basepath)
     chdir(basepath)
     repofile = newrepo
 
