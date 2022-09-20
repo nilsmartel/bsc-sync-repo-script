@@ -19,7 +19,7 @@ repofile = inputfile()
 # change into directory of file
 if "/" in repofile:
     [basepath, newrepo] = repofile.rsplit("/", maxsplit=1)
-    print("changing dir to " + basepath)
+    print("    changing dir to " + basepath)
     chdir(basepath)
     repofile = newrepo
 
@@ -43,6 +43,7 @@ def parseRepos(repocontent):
 
 def ci(repo: Repo):
     if not path.exists("ci-state"):
+        print("    creating ci-state directory")
         makedirs("ci-state")
 
     filename = "ci-state/" + repo.reponame
@@ -66,6 +67,10 @@ def ci(repo: Repo):
         chdir("..")
         return
 
+
+    print("    performing ci for " + repo.reponame)
+    print("    new hash is " + newhash)
+
     # else, update the hash
     with open("../" + filename, "w") as file:
         file.write(newhash)
@@ -76,7 +81,7 @@ def ci(repo: Repo):
         scripts = listdir("ci")
         scripts.sort()
         for script in scripts:
-            print(f"\n\nexecuting {script}\n")
+            print(f"\n\n    executing {script}")
             fullname = "ci/" + script
             system(fullname)
 
@@ -92,7 +97,7 @@ def ci(repo: Repo):
 repos = list(parseRepos(content))
 
 for r in repos:
-    print("    fetching " + r.dirname)
+    print("    syncing" + r.dirname)
     # if repo exist, update repo
     # otherwise fetch it from github
     if path.exists(r.dirname):
