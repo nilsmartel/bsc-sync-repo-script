@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-from os import chdir, system, path
+from os import chdir, system, path, makedirs, listdir
+import subprocess
 
 def inputfile():
     if len(sys.argv) == 2:
@@ -40,6 +41,54 @@ def parseRepos(repocontent):
 
         yield Repo(dirname, reponame)
 
+def ci(repo: Repo):
+    if not path.exists("ci-state"):
+        makedirs("ci-state")
+
+    filename = "ci-state/" + repo.reponame
+
+    # get last known hash
+    hash = ""
+    if path.exists(filename):
+        with open(filename, "r") as file:
+            hash = str(file.read()).strip()
+
+    # get current hash of repo
+    chdir(r.dirname)
+
+    command = "git log | grep commit | head -1"
+    content = subprocess.check_output(["sh", "-c", command], shell=True, universal_newlines=True)
+    newhash = content.replace("commit", "").strip()
+
+    # if the hash hasn't changed, no new commits were added.
+    # nothing left to do!
+    if hash == newhash:
+        chdir("..")
+        return
+
+    # else, update the hash
+    with open("../" + filename, "w") as file:
+        file.write(newhash)
+
+    # and perform ci
+
+    if path.exists("ci"):
+        scripts = listdir("ci")
+        scripts.sort()
+        for script in scripts:
+            print(f"\n\nexecuting {script}\n")
+            fullname = "ci/" + script
+            system(fullname)
+
+
+    chdir("..")
+
+
+
+
+
+
+
 repos = list(parseRepos(content))
 
 for r in repos:
@@ -52,3 +101,5 @@ for r in repos:
         chdir("..")
     else:
         system(f"git clone http://github.com/nilsmartel/{r.reponame} {r.dirname}")
+
+    ci(r)
