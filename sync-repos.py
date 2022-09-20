@@ -19,7 +19,7 @@ repofile = inputfile()
 # change into directory of file
 if "/" in repofile:
     [basepath, newrepo] = repofile.rsplit("/", maxsplit=1)
-    print("    changing dir to " + basepath)
+    print("   changing dir to " + basepath)
     chdir(basepath)
     repofile = newrepo
 
@@ -43,7 +43,7 @@ def parseRepos(repocontent):
 
 def ci(repo: Repo):
     if not path.exists("ci-state"):
-        print("    creating ci-state directory")
+        print("   creating ci-state directory")
         makedirs("ci-state")
 
 
@@ -53,7 +53,7 @@ def ci(repo: Repo):
     # get last known hash
     hash = ""
     if path.exists(filename):
-        print("    reading " + filename)
+        print("   reading " + filename)
         with open(filename, "r") as file:
             hash = str(file.read()).strip()
 
@@ -64,8 +64,8 @@ def ci(repo: Repo):
     print("   getting last commit hash")
     command = "git log | grep commit | head -1"
     content = str(subprocess.check_output(["sh", "-c", command]))
-    print("   " + content)
     newhash = content.replace("commit", "").strip()
+    print("   new hash is " + newhash)
 
     # if the hash hasn't changed, no new commits were added.
     # nothing left to do!
@@ -74,8 +74,8 @@ def ci(repo: Repo):
         return
 
 
-    print("    performing ci for " + repo.reponame)
-    print("    new hash is " + newhash)
+    print("   performing ci for " + repo.reponame)
+    print("   new hash is " + newhash)
 
     # else, update the hash
     with open("../" + filename, "w") as file:
@@ -103,7 +103,7 @@ def ci(repo: Repo):
 repos = list(parseRepos(content))
 
 for r in repos:
-    print("    syncing " + r.dirname)
+    print("   syncing " + r.dirname)
     # if repo exist, update repo
     # otherwise fetch it from github
     if path.exists(r.dirname):
