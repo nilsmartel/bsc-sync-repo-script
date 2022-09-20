@@ -50,4 +50,4 @@ for r in repos:
         system("git pull")
         os.chdir("..")
     else:
-        system(f"git clone https://github.com/nilsmartel/{r.reponame} {r.dirname}")
+        system(f"git clone http://github.com/nilsmartel/{r.reponame} {r.dirname}")
