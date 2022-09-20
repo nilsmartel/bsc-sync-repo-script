@@ -63,9 +63,9 @@ def ci(repo: Repo):
 
     print("   getting last commit hash")
     command = "git log | grep commit | head -1"
-    content = subprocess.check_output(["sh", "-c", command], shell=True, universal_newlines=True)
+    content = str(subprocess.check_output(["sh", "-c", command]))
+    print("   " + content)
     newhash = content.replace("commit", "").strip()
-    print("   hash is " + newhash)
 
     # if the hash hasn't changed, no new commits were added.
     # nothing left to do!
