@@ -47,8 +47,8 @@ for r in repos:
     # if repo exist, update repo
     # otherwise fetch it from github
     if path.exists(r.dirname):
-        os.chdir(r.dirname)
+        chdir(r.dirname)
         system("git pull")
-        os.chdir("..")
+        chdir("..")
     else:
         system(f"git clone http://github.com/nilsmartel/{r.reponame} {r.dirname}")
