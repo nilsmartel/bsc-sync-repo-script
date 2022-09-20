@@ -63,7 +63,7 @@ def ci(repo: Repo):
 
     print("   getting last commit hash")
     command = "git log | grep commit | head -1"
-    content = str(subprocess.check_output(["sh", "-c", command]))
+    content = subprocess.check_output(["sh", "-c", command]).decode("utf-8")
     newhash = content.replace("commit", "").strip()
     print("   new hash is " + newhash)
 
@@ -114,3 +114,4 @@ for r in repos:
         system(f"git clone http://github.com/nilsmartel/{r.reponame} {r.dirname}")
 
     ci(r)
+    print()
