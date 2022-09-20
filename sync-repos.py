@@ -46,7 +46,10 @@ def ci(repo: Repo):
         print("    creating ci-state directory")
         makedirs("ci-state")
 
+
     filename = "ci-state/" + repo.reponame
+
+    print("    reading " + filename)
 
     # get last known hash
     hash = ""
@@ -97,7 +100,7 @@ def ci(repo: Repo):
 repos = list(parseRepos(content))
 
 for r in repos:
-    print("    syncing" + r.dirname)
+    print("    syncing " + r.dirname)
     # if repo exist, update repo
     # otherwise fetch it from github
     if path.exists(r.dirname):
